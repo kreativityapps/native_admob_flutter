@@ -1,18 +1,12 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import '../platform_views.dart';
 import '../utils.dart';
 import '../../native_admob_flutter.dart';
-
-import 'layout_builder/layout_builder.dart';
-import 'utils.dart';
-import 'controller/controller.dart';
 
 const _viewType = 'native_admob';
 
@@ -243,11 +237,15 @@ class _NativeAdState extends State<NativeAd>
     controller = widget.controller ?? NativeAdController();
     controller.attach();
     _onEventSub = controller.onEvent.listen(_handleEvent);
-    if (!controller.isLoaded) _load();
+    if (!controller.isLoaded) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) async {
+        await _load();
+      });
+    }
   }
 
-  void _load([bool force = false]) {
-    controller.load(
+  Future _load([bool force = false]) {
+    return controller.load(
       options: widget.options,
       unitId: widget.unitId,
       timeout: widget.loadTimeout,

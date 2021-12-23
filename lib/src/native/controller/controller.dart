@@ -4,8 +4,6 @@ import 'package:flutter/services.dart';
 
 import '../../../native_admob_flutter.dart';
 import '../../utils.dart';
-import 'media_content.dart';
-import 'options.dart';
 
 export 'media_content.dart';
 export 'options.dart';

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 import '../../native_admob_flutter.dart';
-import '../events.dart';
 import '../utils.dart';
 
 /// An InterstitialAd model to communicate with the model in the platform side.

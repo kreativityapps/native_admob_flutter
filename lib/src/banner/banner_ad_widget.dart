@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import '../../native_admob_flutter.dart';
 import '../platform_views.dart';
 import '../utils.dart';
-import 'controller.dart';
 
 const _viewType = 'banner_admob';
 
