@@ -208,20 +208,26 @@ class _NativeAdState extends State<NativeAd>
   @override
   void didUpdateWidget(NativeAd oldWidget) {
     super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      await _reloadIfOptionsChanged(oldWidget);
+    });
+  }
+
+  Future _reloadIfOptionsChanged(NativeAd oldWidget) async {
     // reload if options changed
     if (widget.reloadWhenOptionsChange &&
         (oldWidget.options?.toString() != widget.options?.toString())) {
-      _load();
+      await _load();
     }
     if (layout(oldWidget).toString() != layout(widget).toString()) {
       _requestAdUIUpdate(layout(widget));
     }
     if (widget.controller?.id != oldWidget.controller?.id) {
       controller = widget.controller!;
-      _onEventSub.cancel();
+      await _onEventSub.cancel();
       controller.attach();
       _onEventSub = controller.onEvent.listen(_handleEvent);
-      if (!controller.isLoaded) _load();
+      if (!controller.isLoaded) await _load();
     }
   }
 
@@ -244,7 +250,8 @@ class _NativeAdState extends State<NativeAd>
     }
   }
 
-  Future _load([bool force = false]) {
+  Future _load([bool force = false]) async {
+    await Future.delayed(Duration(milliseconds: 100));
     return controller.load(
       options: widget.options,
       unitId: widget.unitId,
