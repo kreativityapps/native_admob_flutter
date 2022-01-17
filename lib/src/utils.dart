@@ -246,7 +246,9 @@ abstract class LoadShowAd<T> with UniqueKeyMixin {
 
   @protected
   void init();
+
   Future<bool> load();
+
   Future<bool> show() {
     throw UnimplementedError('This was not implemented for this ad');
   }
@@ -288,4 +290,24 @@ class ServerSideVerificationOptions {
         'userId': this.userId,
         'customData': this.customData,
       };
+}
+
+// Future synchronous executor
+class FutureSyncExecutor {
+  Future? future;
+
+  Future exec(Function function, List<dynamic>? positionalArguments,
+      [Map<Symbol, dynamic>? namedArguments]) {
+    final applyFunction = () {
+      return Function.apply(function, positionalArguments, namedArguments);
+    };
+
+    if (future == null) {
+      future = Future(applyFunction);
+      return future!;
+    } else {
+      future = future!.then((value) => applyFunction());
+      return future!;
+    }
+  }
 }
