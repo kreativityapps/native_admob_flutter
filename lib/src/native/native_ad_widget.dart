@@ -244,9 +244,7 @@ class _NativeAdState extends State<NativeAd>
     controller.attach();
     _onEventSub = controller.onEvent.listen(_handleEvent);
     if (!controller.isLoaded) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) async {
-        await _load();
-      });
+      _load();
     }
   }
 
